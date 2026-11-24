@@ -6,7 +6,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score, classification_report
 
-AGE_THRESHOLD = 39 #If age >= 39, then age feature will be 1, else 0
+AGE_THRESHOLD = 39 #If age >= 39, then age_bin feature will be 1, else 0
 #Do not change the value, it was given by seek_best_age_threshold function.
 
 CUTTING_SEED = 43 #Used to seperate dataset into training, validation and test.
@@ -137,14 +137,12 @@ def evaluate(y_true, y_pred, to_print=False):
     """
     accuracy = accuracy_score(y_true, y_pred) #y_test is the true income
     f1 = f1_score(y_true, y_pred)
-    report = classification_report(y_true, y_pred)
     
     if to_print:
         print(f"Accuracy: {accuracy}")
         print(f"F1 Score: {f1}")
-        print(f"Classification Report:\n{report}")
 
-    return accuracy, f1, report
+    return accuracy, f1
 
 def seek_best_age_threshold(file_path):
     """
@@ -173,29 +171,8 @@ def seek_best_age_threshold(file_path):
 
     return best_threshold
 
-def question1(file_path="data/adult.data"):
-    """
-    Load the dataset, split it into training, validation, and test sets, train a model, make predictions, and evaluate the model.
-
-    Parameters:
-    - file_path: str, path to the CSV file
-
-    Returns:
-    - accuracy: float, accuracy score
-    - f1: float, F1 score
-    - report: str, classification report
-    """
-    df = load_data(file_path)
-    X_train, X_val, X_test, y_train, y_val, y_test = split_data_60_20_20(df)
-    clf = train_model(X_train, y_train)
-    y_pred = predict(clf, X_test)
-    accuracy, f1, report = evaluate(y_test, y_pred, to_print=True)
-    
-    return accuracy, f1, report
-
 
 """
-
 print(seek_best_age_threshold("data/adult.csv")) #Find the best age threshold for binarizing the age feature in the dataset.
 (it returns 39)
 """
