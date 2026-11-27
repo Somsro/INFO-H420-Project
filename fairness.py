@@ -65,3 +65,5 @@ def evaluate_fairness(y_test, y_pred, sensitive_features, to_print=False):
     if to_print:
         print(f"Fairness metrics: {mf.by_group}") # TPR for each of the 4 groupes (2 age_bin * 2 sex)
         print(f'Biggest gap: {mf.difference(method="between_groups")}')   # max - min
+
+    return mf

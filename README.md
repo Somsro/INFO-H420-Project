@@ -92,4 +92,19 @@ the probability of a noise depending on the epsilon value as well as the results
 ### Private classifier results
 As arbitrary choice, we will use the epsilon value of 1.0 for the rest of the project.
 
-The private classifier achieveed an accuracy of 84,11% and a F1 score of 0.631. Compared with 84.34% and 0.639 for the original classifier, we can see that the accuracy decreased by 0.23% and the F1 score decreased by 0.008 so the privacy had a very small impact on the performance of the model.
+The private classifier was evaluated on the private test set and achieved an accuracy of 84,11% and a F1 score of 0.631 on the private test set (split 60/20/20 on the private dataset). Compared with 84.34% and 0.639 for the original classifier, we can see that the accuracy decreased by 0.23% and the F1 score decreased by 0.008 so the privacy had a very small impact on the performance of the model.
+
+The private classifier was also evaluated on the original test set and achieved an accuracy of 84.23% and a F1 score of 0.638. A decrease of 0.11% for the accuracy and 0.001 for the F1 score compared with the original classifier. This allows us to conclude that the private classifier is very close to the original classifier in terms of accuracy and F1 score. 
+Overall, the privacy had a very small impact on the performance of the model.
+
+For the rest of the project, the private dataset will be used for the evaluation.
+
+## Comparaison of the private+fair classifier with the fair classifier
+
+| Classifier | Female, age_bin = 0 | Female, age_bin = 1 | Male, age_bin = 0 | Male, age_bin = 1 | Biggest gap |
+|---|---:|---:|---:|---:|---:|
+| Fair classifier | 0.477 | 0.503 | 0.545 | 0.496 | **0.068** |
+| Private+fair classifier | 0.512 | 0.436 | 0.584 | 0.573 | **0.148** |
+
+The class that got the most affected by the privacy is the female, age_bin = 1 class (woman above the age threshold specified at the beginning). The fair classifier had a TPR of 50.3% meanwhile the private+fair classifier had a TPR of 43.6%. This makes sense since this class is the one with the least number of samples (~4500 individuals) in the dataset. So bringing noice to theses samples has a bigger impact on the model. On the contrary, the TPR of the largest class (male, age_bin = 0) increased from 54.5% to 58.4%.  
+The biggest gap between the 4 TPR's doubled from 6.8% to 14.8% which shows that the privacy had a negative impact on the fairness of the model.

@@ -84,12 +84,30 @@ rng = np.random.default_rng(CUTTING_SEED) # We set the rng to a fixed seed so th
 print("Computing the crosstab of the private dataset...")
 private_dataset = create_private_dataset(df, eps=eps, rng=rng)
 print(compute_crosstab(private_dataset))
-X_train_private, X_val_private, X_test_private, y_train, y_val, y_test = split_data_60_20_20(private_dataset)
+X_train_private, X_val_private, X_test_private, y_train_private, y_val_private, y_test_private = split_data_60_20_20(private_dataset)
 print("Training a private classifier on the private dataset and predicting on the private test set...")
-train_private_classifier = train_model(X_train_private, y_train)
-y_pred_private = predict(train_private_classifier, X_test_private)
+private_classifier = train_model(X_train_private, y_train_private)
+y_pred_private = predict(private_classifier, X_test_private)
 print("Done.\n")
 print("Evaluation of the private classifier on the private test set...")
-evaluate(y_test, y_pred_private, to_print=True)
+evaluate(y_test_private, y_pred_private, to_print=True)
 print("Done.\n")
+print("Evaluation of the private classifier on the original test set...")
+y_pred = predict(private_classifier, X_test)
+evaluate(y_test, y_pred, to_print=True)
 
+
+"""
+Question 5
+"""
+
+
+print("\n-----------------------------------------\nQuestion 5:")
+print("Building private+fair classifier and predicting on the private test set...")
+Xt_test_private, private_fair_classifier = fair_train_transform(X_train_private, y_train_private, X_test_private)
+y_pred_private_fair = fair_predict(private_fair_classifier, Xt_test_private)
+print("Done.\n")
+print("Evaluation of the fairness metric on the private+fair classifier (using the original test set):")
+evaluate_fairness(y_test, y_pred_private_fair, X_test[SENSITIVE], to_print=True)
+print("Evaluation of the fairness metric on the fair classifier (using the original test set):")
+evaluate_fairness(y_test, y_pred_fair, X_test[SENSITIVE], to_print=True)
